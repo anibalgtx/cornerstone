@@ -1,4 +1,4 @@
-import { hooks } from '@bigcommerce/stencil-utils';
+import utils, { hooks } from '@bigcommerce/stencil-utils';
 import CatalogPage from './catalog';
 import compareProducts from './global/compare-products';
 import FacetedSearch from './common/faceted-search';
@@ -44,8 +44,56 @@ export default class Category extends CatalogPage {
         }
 
         $('a.reset-btn').on('click', () => this.setLiveRegionsAttributes($('span.reset-message'), 'status', 'polite'));
-
         this.ariaNotifyNoProducts();
+        this.AddAllToCart();
+        this.RemoveAllFromCart();
+        console.log(this.context.customer);
+    }
+
+    AddAllToCart() {
+        $('#addToCart').on('click', () => {
+            fetch('/api/storefront/carts', {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    lineItems: [
+                        {
+                            quantity: 1,
+                            productId: this.context.category.products[0].id,
+                        },
+                    ],
+                }),
+            })
+                .then((response) => {
+                    if (response.ok) {
+                        alert('Cart has been updated');
+                        utils.api.cart.update();
+                        window.location.reload();
+                    }
+                }).catch(error => console.error(error));
+        });
+    }
+
+    RemoveAllFromCart() {
+        $('#removeFromCart').on('click', () => {
+            fetch(`/api/storefront/carts/${this.context.cartId}`, {
+                method: 'DELETE',
+                credentials: 'same-origin',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then((response) => {
+                    if (response.ok) {
+                        alert('Cart has been removed');
+                        utils.api.cart.update();
+                        window.location.reload();
+                    }
+                }).catch(error => console.error(error));
+        });
     }
 
     ariaNotifyNoProducts() {
