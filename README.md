@@ -16,7 +16,7 @@ function onMouseOut() {
 }
 ```
 
-2. I Added an Add All Items to Cart button on the category page & made it make a request on click:
+2. I Added an Add All Items to Cart button on the category page. It makes a request to storefront API on click.:
 
 ```javascript
     AddAllToCart() {
@@ -47,7 +47,7 @@ function onMouseOut() {
     }
 ```
 
-3. Using handlebars I created a conditional Remove All Items button that only appears when there are items in the cart. It remove all items from de cart when clicking it
+3. Using handlebars, I created a conditional Remove All Items button that only appears when there are items in the cart. It removes all items from de cart when clicking it.
 
 ```html
 {{#if cart_id}}
@@ -78,7 +78,7 @@ function onMouseOut() {
     }
 ```
 
-4. Using front matters & inject. I have access to the customer data. When a user is logged in. I show a banner with email, name & phone.
+4. Using front matters & inject. I have access to the customer data. When a user is logged in. I show a banner with the user's email, name & phone.
 
 ```html
 {{#if customer.email}}
